@@ -218,7 +218,8 @@ fun todoItemCard(
                     disabledContainerColor = Color.Transparent,
                     focusedIndicatorColor = Color.Transparent, // Hides the underline
                     unfocusedIndicatorColor = Color.Transparent
-                )
+                ),
+                readOnly = true
             )
             IconButton(onClick = onDelete) {
                 Icon(
