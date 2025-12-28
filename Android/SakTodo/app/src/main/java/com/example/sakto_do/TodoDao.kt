@@ -11,6 +11,10 @@ interface TodoDao{
     @Query("SELECT * from todos")
     fun getAllTodos(): Flow<List<Todo>>
 
+    // ✅ ADD THIS METHOD (FOR WIDGET USE)
+    @Query("SELECT * FROM todos")
+    suspend fun getAllTodosOnce(): List<Todo>
+
     @Insert
     suspend fun insert(todo: Todo)
 
