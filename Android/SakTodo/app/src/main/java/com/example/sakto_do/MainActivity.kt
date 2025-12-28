@@ -39,6 +39,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,6 +53,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.sakto_do.ui.theme.SakTodoTheme
+import androidx.lifecycle.viewmodel.compose.viewModel
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,10 +73,9 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun toDoListScreen() {
-    var inputText by remember { mutableStateOf("") }
-    var inplists by remember { mutableStateOf(listOf<String>()) }
-
+fun toDoListScreen(viewModel: TodoViewModel = viewModel()) {
+    //var inplists by remember { mutableStateOf(listOf<String>()) }
+    val todos by viewModel.todos.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
     Scaffold(
         floatingActionButton = {
@@ -121,13 +123,13 @@ fun toDoListScreen() {
                     Modifier.weight(1f),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    items(inplists) {
+                    items(todos) {
 
                             todo ->
                         todoItemCard(
-                            todo = todo,
+                            todo = todo.text,
                             onDelete = {
-                                inplists = inplists - todo
+                                viewModel.deleteTodo(todo)
                             });
                     }
                 }
@@ -137,8 +139,9 @@ fun toDoListScreen() {
     }
     if (showDialog) {
         AddTodoDialog(
-            onAdd = { newTodo ->
-                inplists = inplists + newTodo
+            onAdd = {
+//                inplists = inplists + newTodo
+                viewModel.addTodo(it)
                 showDialog = false
             },
             onDismiss = { showDialog = false }
