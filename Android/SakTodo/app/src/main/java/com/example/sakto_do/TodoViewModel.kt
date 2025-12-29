@@ -23,12 +23,14 @@ class TodoViewModel(application: Application) : AndroidViewModel(application) {
     fun addTodo(text: String) {
         viewModelScope.launch {
             dao.insert(Todo(text = text))
+            TodoWidgetUpdater.update(getApplication())
         }
     }
 
     fun deleteTodo(todo: Todo) {
         viewModelScope.launch {
             dao.delete(todo)
+            TodoWidgetUpdater.update(getApplication())
         }
     }
 }
